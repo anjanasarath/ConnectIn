@@ -1,0 +1,37 @@
+body{
+font-family: -apple
+-system,BlinkMacsystemFo
+nt,Segoe UI,Roboto,Oxygen
+-Sans,Ubuntu,Cantarell,
+ Helvetticca Neue,
+  sans-serif;
+}
+
+.row {
+  display: flex;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.center {
+  align-items: center;
+  justify-content: center;
+}
+
+.paperContent {
+  max-width: 800px;
+  min-height: 300px;
+}
+
+.letsConnect {
+  color: #3498DB !important;
+  font-size: 20px !important;
+}
+
+.fileInput {
+  opacity: 1 !important;
+  width: 200px;
+}
