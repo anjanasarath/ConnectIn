@@ -2,6 +2,7 @@ import { all, call, fork, put, take } from 'redux-saga/effects';
 import * as actions from '../actions';
 import { uploadImageApi, submitFormApi } from '../serviceApi';
 
+
 function* submitForm(){
   while(true) {
     const { companyName, companyDesc } = yield take(actions.SUBMIT_FORM)
@@ -18,12 +19,14 @@ function* uploadImage() {
   while(true) {
     const { file } = yield take(actions.UPLOAD_IMAGE)
     yield fork(callUploadImageApi, file)
+    yield put(actions.showLoading())
   }
 }
 
 function* callUploadImageApi(file) {
   const response = yield call(uploadImageApi, file)
 }
+
 
 export default function* rootSaga() {
   yield all([
