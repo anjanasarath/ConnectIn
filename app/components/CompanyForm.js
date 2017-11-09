@@ -3,9 +3,10 @@ import ReactDom from 'react-dom';
 import { TextField } from 'redux-form-material-ui';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
+import LoadingBar from 'react-redux-loading-bar';
+import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import FileFileUpload from 'react-material-icons/icons/file/file-upload';
-import ImageImage from 'react-material-icons/icons/image/image';
 import FileInput from 'react-file-input';
 import Subheader from 'material-ui/Subheader';
 import Paper from 'material-ui/Paper';
@@ -20,6 +21,7 @@ class CompanyForm extends React.Component {
     this.state = {
       file: '',
       open: false,
+      bar: 0
     };
 
     this.onFileSelect = this.onFileSelect.bind(this);
@@ -36,7 +38,8 @@ class CompanyForm extends React.Component {
 
   upload() {
     if(this.state.file) {
-      this.props.uploadImage(this.state.file)
+      const action = uploadImage(this.state.file)
+      this.props.dispatch(action);  //store's dispatch() method
     }
   }
 
@@ -50,10 +53,11 @@ class CompanyForm extends React.Component {
     this.setState({
       open: false
     })
+
   }
 
   render() {
-    const { handleSubmit, isSubmitted } = this.props;
+    const { handleSubmit, isSubmitted, bar } = this.props;
     const actions = [
       <FlatButton
         label="Close"
@@ -65,9 +69,12 @@ class CompanyForm extends React.Component {
     return(
         <Paper className="paperContent row center" zDepth={5}>
           <div>
+            { bar &&
+            <LoadingBar />
+            }
             <img src={Logo}></img>
           </div>
-          <div className="column center">
+            <div className="column center">
             <form onSubmit={handleSubmit}>
               <Subheader className="letsConnect">Let&#39;s ConnectIn!!</Subheader>
               <div>
@@ -120,6 +127,10 @@ class CompanyForm extends React.Component {
   }
 }
 
+CompanyForm.propTypes = {
+  //actions: PropTypes.object.isRequired,
+}
+
 function mapStateToProps(state) {
   console.log(state)
   if( state.companyForm && state.companyForm.isSubmitted ) {
@@ -127,10 +138,17 @@ function mapStateToProps(state) {
       isSubmitted: state.companyForm.isSubmitted
     }
   }
+  if(state.loadingBar && state.loadingBar.bar ) {
+    return {
+      bar: state.loadingBar.bar
+    }
+  }
   return {
-    isSubmitted: false
+    isSubmitted: false,
+    bar: 0
   }
 }
+
 
 CompanyForm = reduxForm({
     form: 'companyForm',
