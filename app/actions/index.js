@@ -1,6 +1,7 @@
 export const UPLOAD_IMAGE = 'UPLOAD_IMAGE'
 export const SUBMIT_FORM = 'SUBMIT_FORM'
 export const SUBMIT_SUCCESS = 'SUBMIT_SUCCESS'
+export const SHOW_LOADING = 'SHOW_LOADING'
 
 export function uploadImage(file) {
   return { type: UPLOAD_IMAGE, file }
@@ -11,4 +12,8 @@ export function submitForm(values) {
 
 export function submitSuccess() {
   return { type: SUBMIT_SUCCESS }
+}
+
+export function showLoading() {
+  return { type: SHOW_LOADING }
 }
