@@ -27,7 +27,7 @@ npm run serve
 
 This project uses React and Redux architecture. It uses redux-form for sumbitting the company name and company description to [posttestserver.com](http://posttestserver.com/post.php?dir=example). It also uses react-file-input for selecting the file from the file system. It uses the modern browser's fetch api to do the POST requests. This project also uses material-ui for the UI.
 
-When the user clicks on the submit button, the redux-form dispatches a SUBMIT_FORM action and the redux-saga catches this action and do a POST request to posttestserver.com using feth api. When the response comes, it prints the response to console and the saga dispatches a SUBMIT_SUCCESS action. The reducer catches this action and updates the state with 'isSubmitted' set to 'true'. Now the form component gets this updated state in mapStateToProps function and updates the props. This re-renders the form component and opens a "Submitted Successfully" dialog.
+When the user clicks on the submit button, the redux-form dispatches a SUBMIT_FORM action and the redux-saga catches this action and do a POST request to posttestserver.com using fetch api. When the response comes, it prints the response to console and the saga dispatches a SUBMIT_SUCCESS action. The reducer catches this action and updates the state with 'isSubmitted' set to 'true'. Now the form component gets this updated state in mapStateToProps function and updates the props. This re-renders the form component and opens a "Submitted Successfully" dialog.
 
 When the user selects a file and clicks on the upload icon, the form dispatches an UPLOAD_IMAGE action. The saga catches this action and uploads the image to posttestserver.com using fetch api and prints the response to the console.
 
