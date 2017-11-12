@@ -1,6 +1,7 @@
 import { all, call, fork, put, take } from 'redux-saga/effects';
 import * as actions from '../actions';
 import { uploadImageApi, submitFormApi } from '../serviceApi';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
 
 
 function* submitForm(){
@@ -11,7 +12,6 @@ function* submitForm(){
 }
 function* callSubmitFormApi(companyName, companyDesc){
   const response = yield call(submitFormApi, companyName, companyDesc)
-  debugger;
   yield put(actions.submitSuccess())
 }
 
@@ -19,12 +19,13 @@ function* uploadImage() {
   while(true) {
     const { file } = yield take(actions.UPLOAD_IMAGE)
     yield fork(callUploadImageApi, file)
-    yield put(actions.showLoading())
+
   }
 }
 
 function* callUploadImageApi(file) {
   const response = yield call(uploadImageApi, file)
+  yield put(actions.uploadImageSuccess())
 }
 
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import { TextField } from 'redux-form-material-ui';
+import { bindActionCreators } from 'redux';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import LoadingBar from 'react-redux-loading-bar';
@@ -11,8 +12,9 @@ import FileInput from 'react-file-input';
 import Subheader from 'material-ui/Subheader';
 import Paper from 'material-ui/Paper';
 import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import Logo from '../logo/ConnectIn.jpg';
-import { uploadImage, submitForm, submitSuccess } from '../actions';
+import { uploadImage } from '../actions';
 import { Field, reduxForm } from 'redux-form';
 
 class CompanyForm extends React.Component {
@@ -21,13 +23,14 @@ class CompanyForm extends React.Component {
     this.state = {
       file: '',
       open: false,
-      bar: 0
+      showLoadingBar: false
     };
 
     this.onFileSelect = this.onFileSelect.bind(this);
     this.upload = this.upload.bind(this);
     this.openDialog = this.openDialog.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.hideLoadingBar = this.hideLoadingBar.bind(this);
   }
 
   onFileSelect(event) {
@@ -38,8 +41,17 @@ class CompanyForm extends React.Component {
 
   upload() {
     if(this.state.file) {
+      this.props.actions.showLoading();
       const action = uploadImage(this.state.file)
-      this.props.dispatch(action);  //store's dispatch() method
+      this.props.dispatch(action); //store's dispatch() method
+    this.setState({ showLoadingBar:true});
+   }
+  }
+
+  hideLoadingBar() {
+    if(this.state.showLoadingBar && this.props.isImageUploaded){
+      this.props.actions.hideLoading();
+      this.setState({showLoadingBar: false});
     }
   }
 
@@ -57,7 +69,7 @@ class CompanyForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, isSubmitted, bar } = this.props;
+    const { handleSubmit, isSubmitted, isImageUploaded } = this.props;
     const actions = [
       <FlatButton
         label="Close"
@@ -65,13 +77,13 @@ class CompanyForm extends React.Component {
         onClick={this.handleClose}
       />
     ]
-
+      if(isImageUploaded){
+        setTimeout(this.hideLoadingBar,100)
+      }
     return(
         <Paper className="paperContent row center" zDepth={5}>
           <div>
-            { bar &&
-            <LoadingBar />
-            }
+            <LoadingBar  style={{ backgroundColor: 'blue', height: '5px' }}/>
             <img src={Logo}></img>
           </div>
             <div className="column center">
@@ -128,7 +140,7 @@ class CompanyForm extends React.Component {
 }
 
 CompanyForm.propTypes = {
-  //actions: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired,
 }
 
 function mapStateToProps(state) {
@@ -138,17 +150,19 @@ function mapStateToProps(state) {
       isSubmitted: state.companyForm.isSubmitted
     }
   }
-  if(state.loadingBar && state.loadingBar.bar ) {
+if(state.companyForm && state.companyForm.isImageUploaded ) {
     return {
-      bar: state.loadingBar.bar
+     isImageUploaded: state.companyForm.isImageUploaded
     }
   }
   return {
     isSubmitted: false,
-    bar: 0
+    isImageUploaded: false
   }
 }
-
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({ showLoading, hideLoading }, dispatch),
+})
 
 CompanyForm = reduxForm({
     form: 'companyForm',
@@ -158,6 +172,4 @@ CompanyForm = reduxForm({
     ]
 })(CompanyForm);
 
-export default connect(mapStateToProps,{
-  uploadImage
-})(CompanyForm)
+export default connect(mapStateToProps,mapDispatchToProps)(CompanyForm)

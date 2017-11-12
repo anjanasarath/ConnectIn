@@ -10,17 +10,20 @@
   "license": "ISC",
   "dependencies": {
     "app-registry": "^1.0.1",
+    "jquery": "^3.2.1",
     "material-ui": "^0.19.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-file-input": "^0.2.5",
     "react-material-icons": "^1.0.2",
     "react-redux": "^5.0.6",
+    "react-redux-loading-bar": "^2.9.3",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "redux-form": "^7.1.0",
     "redux-form-material-ui": "^4.3.0",
     "redux-logger": "^3.0.6",
+    "redux-promise-middleware": "^4.4.2",
     "redux-saga": "^0.15.6"
   },
   "babel": {
